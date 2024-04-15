@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import "./App.css";
+import Home from './pages/Home';
+import MainHeader from './components/Header';
+ 
+import AddCar from './pages/AddCar';
+import Login from './components/Login';
+import Register from './components/Register';
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import MyCars from './pages/MyCars';
+import UpdateCar from './pages/UpdateCar';
+import BookNow from './pages/BookNow';
+import AllBookings from './pages/GetAllBookings';
+import CarOrders from './pages/GetOrders';
+import ProtectedRoute from './components/ProtectedRoute';
+import ErrorPage from './pages/ErrorPage404';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <>
+    <BrowserRouter>
+    <MainHeader/>
+    <ToastContainer/>
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+          <Route path='/booknow/:id' element={<ProtectedRoute><BookNow/></ProtectedRoute>}/>
+          <Route path='/getallbookings' element={<ProtectedRoute><AllBookings/></ProtectedRoute>}/>
+          <Route path='/addcar' element={<ProtectedRoute><AddCar/></ProtectedRoute>}/>
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/register' element={<Register/>}/>
+          <Route path='/mycars' element={<ProtectedRoute><MyCars/></ProtectedRoute>}/>
+          <Route path='/updatecar/:id' element={<ProtectedRoute><UpdateCar/></ProtectedRoute>}/>
+          <Route path='/getAll-carOrders' element={<ProtectedRoute><CarOrders/></ProtectedRoute>}/>
+          <Route path='*' element={<ErrorPage/>}/>
+        </Routes>
+    </BrowserRouter>  
+  </>;
 }
 
 export default App;
