@@ -35,6 +35,12 @@ function AllBookings() {
       useEffect(() => {
         fetchCars();
       }, []);
+
+      const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+        return date.toLocaleDateString(undefined, options);
+      };
   return (
     <>
             {bookings.length === 0 ? (
@@ -62,8 +68,8 @@ function AllBookings() {
             <tr key={booking._id}>
             <td>{carNames.find(car => car._id === booking.selectedCarId)?.name}</td>
               <td>{booking.username}</td>
-              <td>{booking.startDate}</td>
-              <td>{booking.endDate}</td>
+              <td>{ formatDate(booking.startDate)}</td>
+              <td>{formatDate(booking.endDate)}</td>
               <td>
                 Email: {booking.email}
                 <br />
@@ -71,7 +77,10 @@ function AllBookings() {
                 <br />
                 Address: {booking.address}, {booking.city}
               </td>
-              <td>{booking.totalAmount}</td>
+              <td>{booking.totalAmount} 
+              <br/>
+              <small> Cash In Hand</small>
+              </td>
             </tr>
           ))}
         </tbody>

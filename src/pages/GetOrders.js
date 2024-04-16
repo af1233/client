@@ -76,7 +76,7 @@ function OrdersTable() {
               <td>{order.phone}</td>
               <td>{order.address}</td>
               <td>{order.city}</td>
-              <td>{order.totalAmount}</td>
+              <td>{order.totalAmount} <small>Cash in Hand</small></td>
             </tr>
           ))}
         </tbody>

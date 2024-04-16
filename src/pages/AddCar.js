@@ -92,7 +92,7 @@ function AddCar() {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicImage">
-              <Form.Label>Image:</Form.Label>
+              <Form.Label>Image:<small> (image size must be less then 5 MB)</small></Form.Label>
               <Form.Control
                 type="file"
                 onChange={(e) => setImage(e.target.files[0])} // Update the selected image file

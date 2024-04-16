@@ -166,7 +166,7 @@ function BookNow() {
             </Col>
             <Col md={6}>
                 <Form.Group controlId="totalAmount">
-                    <Form.Label>Total Amount</Form.Label>
+                    <Form.Label>Total Amount: <small> Cash In Hand</small></Form.Label>
                     <Form.Control type='text' placeholder='Total' value={totalAmount} readOnly />
                 </Form.Group>
             </Col>
