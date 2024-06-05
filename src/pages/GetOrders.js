@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
 import useAuth from "../redux/store";
-import Button from "react-bootstrap/esm/Button";
+// import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom";
 
 function OrdersTable() {
@@ -48,39 +48,41 @@ function OrdersTable() {
     ) : (
     <div style={{padding:"30px"}}>
       <h2>Customer Orders</h2>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Car Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Total Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order, index) => (
-            <tr key={order._id}>
-              <td>{orders.length-index}</td>
-              <td>{carNames.find(car => car._id === order.selectedCarId)?.name}</td>
-
-              <td>{formatDate(order.startDate)}</td>
-              <td>{formatDate(order.endDate)}</td>
-              <td>{order.username}</td>
-              <td>{order.email}</td>
-              <td>{order.phone}</td>
-              <td>{order.address}</td>
-              <td>{order.city}</td>
-              <td>{order.totalAmount} <small>Cash in Hand</small></td>
+      <div className="table-responsive">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Car Name</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>Total Amount</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {orders.map((order, index) => (
+              <tr key={order._id}>
+                <td>{orders.length-index}</td>
+                <td>{carNames.find(car => car._id === order.selectedCarId)?.name}</td>
+
+                <td>{formatDate(order.startDate)}</td>
+                <td>{formatDate(order.endDate)}</td>
+                <td>{order.username}</td>
+                <td>{order.email}</td>
+                <td>{order.phone}</td>
+                <td>{order.address}</td>
+                <td>{order.city}</td>
+                <td>{order.totalAmount} <small>Cash in Hand</small></td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </div>
     )}
     </>

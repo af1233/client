@@ -46,7 +46,7 @@ function AddCar() {
       }
     } catch (error) {
       // Show error toast if request fails
-      toast.error("Failed to add car");
+      toast.error(error);  
     } finally {
       setLoading(false); // Stop loading
     }

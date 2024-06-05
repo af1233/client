@@ -19,7 +19,7 @@ import ErrorPage from './pages/ErrorPage404';
 function App() {
   return <>
     <BrowserRouter>
-    <MainHeader/>
+    <MainHeader/> 
     <ToastContainer/>
         <Routes>
           <Route path='/' element={<Home/>}/>

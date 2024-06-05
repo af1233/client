@@ -10,65 +10,64 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const {storeTokenToLS}=useAuth();
+  const { storeTokenToLS } = useAuth();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Add your login logic here
-    // console.log('Email:', email);
-    // console.log('Password:', password);
     try {
       const res = await axios.post("http://localhost:5000/api/v1/login", {
         email,
         password,
       });
       if (res.data) {
-        toast.success("login success");
-        // Reset form fields
-         storeTokenToLS(res.data.token)
+        toast.success("Login successful");
+        storeTokenToLS(res.data.token);
         setEmail("");
         setPassword("");
         navigate("/");
       }
     } catch (error) {
-      toast(error);
+      toast.error("Failed to login. Please try again.");
     }
   };
 
   return (
-    <div className=" form_container">
-      <h2>Welcome To Login</h2>
-      <div>
-        <Form style={{ minWidth: "400px" }} onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Welcome To Login</h2>
+      <div className="row justify-content-center">
+        <div className="col-lg-6 col-md-8">
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-          <p className="mt-3">
-            Don't have an account?{" "}
-            <Link to="/register" style={{ color: "blue" }}>
-              Please Register
-            </Link>
-          </p>
-        </Form>
+            <Button variant="success" type="submit" className="w-100 mt-3">
+              Submit
+            </Button>
+            <p className="mt-3 text-center">
+              Don't have an account?{" "}
+              <Link to="/register" style={{ color: "blue" }}>
+                Please Register
+              </Link>
+            </p>
+          </Form>
+        </div>
       </div>
     </div>
   );

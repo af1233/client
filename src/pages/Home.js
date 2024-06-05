@@ -3,7 +3,7 @@ import AllCars from './GetAllCars'
  
 const Home = () => {
   return (
-    <div>
+    <div className='home'>
       <AllCars/>
    
     </div>

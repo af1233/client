@@ -4,7 +4,6 @@ import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import useAuth from "../redux/store";
-// import UpdateCar from "./UpdateCar";
 
 function MyCars() {
   const [cars, setCars] = useState([]);
@@ -21,7 +20,6 @@ function MyCars() {
         }
       );
       setCars(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching cars:", error);
     }
@@ -29,7 +27,7 @@ function MyCars() {
 
   useEffect(() => {
     fetchCars();
-  }, []);
+  });
 
   const handleDelete = async (id) => {
     try {
@@ -49,33 +47,34 @@ function MyCars() {
   return (
     <>
       {cars.length === 0 ? (
-        <div className="form_container" style={{ textAlign: "center" }}>
-          <h2>Ops, &#129322; You Don't have Cars For Rent</h2>
-          <Button as={Link} to={'/addcar'} variant="primary" >Add Car</Button>
+        <div className="container">
+          <div className="form_container text-center">
+            <h2>Ops, &#129322; You Don't have Cars For Rent</h2>
+            <Button as={Link} to={'/addcar'} variant="primary" >Add Car</Button>
+          </div>
         </div>
       ) : (
-        <div style={{ marginTop: "30px", padding: "30px" }}>
-          <h2>My Cars</h2>
-          <ul className="d-flex justify-between items-center flex-wrap gap-5 mt-3">
-            {cars.map((car) => (
-              <Card style={{ width: "14rem" }} key={car._id}>
-              <Card.Img
-                variant="top"
-                src={car.image}
-                style={{ height: "200px", objectFit: "cover" }} // Set a fixed height and object-fit style
-              />
-                <Card.Body>
-                  <Card.Title>Name: {car.name}</Card.Title>
-                  <Card.Text>
-                    Rent: ${car.rent}/day
-                  </Card.Text>
-                  <Button as={Link} variant="outline-primary" className="mx-2" to={`/updatecar/${car._id}`}>Update</Button>
-                  <Button variant="outline-danger" className="mx-2"  onClick={() => handleDelete(car._id)}>Delete</Button>
-                </Card.Body>
-                {/* Render UpdateCar component */}
-              </Card>
-            ))}
-          </ul>
+        <div className="container">
+          <div style={{ marginTop: "30px", padding: "30px" }}>
+            <h2 className="text-center mb-4">My Cars</h2>
+            <div className="row justify-content-center">
+              {cars.map((car) => (
+                <div className="col-lg-3 col-md-4 col-sm-6 mb-4" key={car._id}>
+                  <Card>
+                    <Card.Img variant="top" src={car.image} style={{ height: "200px", objectFit: "cover" }} />
+                    <Card.Body>
+                      <Card.Title>{car.name}</Card.Title>
+                      <Card.Text>
+                        Rent: ${car.rent}/day
+                      </Card.Text>
+                      <Button as={Link} variant="outline-primary" className="mx-2" to={`/updatecar/${car._id}`}>Update</Button>
+                      <Button variant="outline-danger" className="mx-2" onClick={() => handleDelete(car._id)}>Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </>

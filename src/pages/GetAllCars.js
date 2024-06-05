@@ -4,17 +4,16 @@ import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import SortingComp from "../components/SortingComp";
-import Spinner from "react-bootstrap/Spinner";
+// import Spinner from "react-bootstrap/Spinner";
 import Loader from "../components/Loader";
 
 function AllCars() {
   const [cars, setCars] = useState([]);
   const [sortedCars, setSortedCars] = useState([]);
-  const [sortByRent, setSortByRent] = useState(null);
-  const [sortByName, setSortByName] = useState(null);
   const [startDate, setStartDate] = useState(""); // State for start date
   const [endDate, setEndDate] = useState(""); // State for end date
   const [loading, setLoading] = useState(true); // State to track loading status
+  const [searchPerformed, setSearchPerformed] = useState(false);
 
   async function fetchCars() {
     try {
@@ -22,7 +21,6 @@ function AllCars() {
         `http://localhost:5000/api/v1/getAllcars`
       );
       setCars(response.data);
-      setSortedCars(response.data);
       setLoading(false); // Set loading to false when cars are fetched
     } catch (error) {
       console.error("Error fetching cars:", error);
@@ -32,92 +30,110 @@ function AllCars() {
 
   useEffect(() => {
     fetchCars();
-  }, [startDate, endDate]); // Fetch cars when start date or end date changes
+  }, []); // Fetch cars only once when component mounts
 
-  // Function to handle sorting by rent
-  const handleSortByRent = (event) => {
+  const handleSort = (event) => {
     const sortType = event.target.value;
     let sorted = [...sortedCars];
-    if (sortType === "1") {
+    if (sortType === "rentLowToHigh") {
       sorted = sorted.sort((a, b) => a.rent - b.rent);
-    } else if (sortType === "2") {
+    } else if (sortType === "rentHighToLow") {
       sorted = sorted.sort((a, b) => b.rent - a.rent);
-    }
-    setSortedCars(sorted);
-    setSortByRent(sortType);
-  };
-
-  // Function to handle sorting by name
-  const handleSortByName = (event) => {
-    const sortType = event.target.value;
-    let sorted = [...sortedCars];
-    if (sortType === "1") {
+    } else if (sortType === "nameAscending") {
       sorted = sorted.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortType === "2") {
+    } else if (sortType === "nameDescending") {
       sorted = sorted.sort((a, b) => b.name.localeCompare(a.name));
     }
     setSortedCars(sorted);
-    setSortByName(sortType);
   };
 
+  // const handleSearch = () => {
+  //   const filteredCars = cars.filter((car) => {
+  //     const hasOverlap = car.bookedTimeSlots.some((slot) => {
+  //       return slot.startDate < endDate && slot.endDate > startDate;
+  //     });
+  //     return !hasOverlap;
+  //   });
+  //   setSortedCars(filteredCars);
+  //   setSearchPerformed(true); // Set searchPerformed to true after search
+  // };
   const handleSearch = () => {
+    // Check if the start date is greater than the end date
+    if (startDate > endDate) {
+      // If start date is greater, set end date equal to start date
+      setEndDate(startDate);
+    }
+  
+    // Perform the search logic
     const filteredCars = cars.filter((car) => {
-      // Check each booked time slot for overlap with the specified start and end dates
       const hasOverlap = car.bookedTimeSlots.some((slot) => {
         return slot.startDate < endDate && slot.endDate > startDate;
       });
-      // If no overlap is found, include the car in filteredCars
       return !hasOverlap;
     });
-    // Update sortedCars state with the filtered cars
+  
     setSortedCars(filteredCars);
+    setSearchPerformed(true); // Set searchPerformed to true after search
   };
-
+  
   return (
-    <div style={{ marginTop: "30px", padding: "30px" }}>
-      <h2 className="mb-4 pb-3">All Cars</h2>
-      <SortingComp
+    <>
+    <div  className="search-items">
+      <h2 className="text-center my-4">Find Used Cars in Pakistan</h2>
+   <div>
+   <SortingComp
+        handleSort={handleSort}
         handleSearch={handleSearch}
-        handleSortByName={handleSortByName}
-        handleSortByRent={handleSortByRent}
         startDate={startDate}
         endDate={endDate}
         setEndDate={setEndDate}
         setStartDate={setStartDate}
+        searchPerformed={searchPerformed}
       />
-      {loading ? (
-       <div>
-        <Loader/>
-       </div>
-      ) : (
-        <ul className="d-flex justify-between items-center flex-wrap gap-5 mt-3">
-          {sortedCars.map((car) => (
-            <Card style={{ width: "14rem" }} key={car._id}>
-              <Card.Img
-                variant="top"
-                src={car.image}
-                style={{ height: "200px", objectFit: "cover" }} // Set a fixed height and object-fit style
-              />
-              <Card.Body>
-                <Card.Title>Name: {car.name}</Card.Title>
-                <Card.Text>
-                  Color: {car.color}
-                  <br />
-                  Rent: ${car.rent}/day
-                </Card.Text>
-                <Button
-                  as={Link}
-                  variant="outline-primary"
-                  to={`/booknow/${car._id}`}
-                >
-                  Book Now
-                </Button>
-              </Card.Body>
-            </Card>
-          ))}
-        </ul>
-      )}
+   </div>
     </div>
+    {/* ........................... */}
+    {loading ? (
+        <div className="text-center my-5">
+          <Loader />
+        </div>
+      ) : searchPerformed ? (
+        <div className="row justify-content-start cars-section">
+          {sortedCars.length > 0 ? (
+            sortedCars.map((car, index) => (
+              <div key={car._id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <Card>
+                  <Card.Img
+                    variant="top"
+                    src={car.image}
+                    style={{ height: "200px", objectFit: "cover" }}
+                  />
+                  <Card.Body>
+                    <Card.Title>{car.name}</Card.Title>
+                    <Card.Text>
+                      Color: {car.color}
+                      <br />
+                      Rent: ${car.rent}/day
+                    </Card.Text>
+                    <Button
+                      as={Link}
+                      variant="outline-primary"
+                      to={`/booknow/${car._id}?startDate=${startDate}&endDate=${endDate}`}
+                    >
+                      Book Now
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))
+          ) : (
+            <p className="text-center">No available cars for selected dates.</p>
+          )}
+        </div>
+      ) : (
+       null
+      )}
+    </>
   );
 }
 

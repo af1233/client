@@ -4,7 +4,8 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { useNavigate, useParams } from 'react-router-dom';
+// import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import {toast} from 'react-toastify'
 import useAuth from '../redux/store';
 function BookNow() {
@@ -23,6 +24,8 @@ function BookNow() {
     const [totalAmount, setTotalAmount] = useState('');
    const navigate=useNavigate();
    const { token } = useAuth();
+   const location = useLocation();
+
     useEffect(() => {
         async function fetchCar() {
             try {
@@ -40,6 +43,18 @@ function BookNow() {
 
         fetchCar();
     }, [id]);
+
+    useEffect(() => {
+        // Retrieve query parameters for startDate and endDate from the location object
+        const searchParams = new URLSearchParams(location.search);
+        const start = searchParams.get('startDate');
+        const end = searchParams.get('endDate');
+        // Set default start and end dates if they exist
+        if (start && end) {
+          setStartDate(start);
+          setEndDate(end);
+        }
+      }, [location.search]);
 
     useEffect(() => {
         // Calculate total amount when the component mounts or when startDate and endDate are set
@@ -120,13 +135,13 @@ function BookNow() {
             <Col md={6}>
                 <Form.Group controlId="startDate">
                     <Form.Label>Start Date</Form.Label>
-                    <Form.Control type="date" placeholder="Enter Start Date" value={startDate} onChange={handleStartDateChange} />
+                    <Form.Control type="date" placeholder="Enter Start Date" value={startDate} onChange={handleStartDateChange} readOnly/>
                 </Form.Group>
             </Col>
             <Col md={6}>
                 <Form.Group controlId="endDate">
                     <Form.Label>End Date</Form.Label>
-                    <Form.Control type="date" placeholder="Enter End Date" value={endDate} onChange={handleEndDateChange} />
+                    <Form.Control type="date" placeholder="Enter End Date" value={endDate} onChange={handleEndDateChange} readOnly/>
                 </Form.Group>
             </Col>
         </Row>
@@ -166,7 +181,7 @@ function BookNow() {
             </Col>
             <Col md={6}>
                 <Form.Group controlId="totalAmount">
-                    <Form.Label>Total Amount: <small> Cash In Hand</small></Form.Label>
+                    <Form.Label>Total Amount: <small> (Cash In Hand)</small></Form.Label>
                     <Form.Control type='text' placeholder='Total' value={totalAmount} readOnly />
                 </Form.Group>
             </Col>

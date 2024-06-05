@@ -52,39 +52,41 @@ function AllBookings() {
   
     <div className='m-5 '>
       <h2>All Bookings</h2>
-      <Table striped bordered hover>
-        <thead>
-          <tr className='table-primary'>
-            <th>Car</th>
-            <th>Customer</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Contact</th>
-            <th>Total Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map(booking => (
-            <tr key={booking._id}>
-            <td>{carNames.find(car => car._id === booking.selectedCarId)?.name}</td>
-              <td>{booking.username}</td>
-              <td>{ formatDate(booking.startDate)}</td>
-              <td>{formatDate(booking.endDate)}</td>
-              <td>
-                Email: {booking.email}
-                <br />
-                Phone: {booking.phone}
-                <br />
-                Address: {booking.address}, {booking.city}
-              </td>
-              <td>{booking.totalAmount} 
-              <br/>
-              <small> Cash In Hand</small>
-              </td>
+      <div className="table-responsive">
+        <Table striped bordered hover>
+          <thead>
+            <tr className='table-primary'>
+              <th>Car</th>
+              <th>Customer</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Contact</th>
+              <th>Total Amount</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {bookings.map(booking => (
+              <tr key={booking._id}>
+              <td>{carNames.find(car => car._id === booking.selectedCarId)?.name}</td>
+                <td>{booking.username}</td>
+                <td>{ formatDate(booking.startDate)}</td>
+                <td>{formatDate(booking.endDate)}</td>
+                <td>
+                  Email: {booking.email}
+                  <br />
+                  Phone: {booking.phone}
+                  <br />
+                  Address: {booking.address}, {booking.city}
+                </td>
+                <td>{booking.totalAmount} 
+                <br/>
+                <small> Cash In Hand</small>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </div>
           )  }
     </>
